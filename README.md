@@ -1,44 +1,48 @@
 # Full-Stack Quiz Web App 🚀
 
-Aplikasi kuis pilihan ganda interaktif yang dibangun menggunakan arsitektur *decoupled* (terpisah antara Frontend dan Backend). Aplikasi ini dilengkapi dengan sistem autentikasi pengguna, penghitung waktu mundur, navigasi soal dinamis, dan sistem tinjauan hasil (analisis benar/salah).
+Aplikasi kuis pilihan ganda interaktif yang dibangun menggunakan arsitektur *decoupled* (Frontend dan Backend terpisah). Proyek ini telah dioptimalkan dengan standar *Enterprise UI/UX*, menampilkan animasi transisi yang mulus, sistem manajemen sesi, dan fitur evaluasi *grading* otomatis.
 
 ## 🛠️ Tech Stack
-* **Frontend:** Vue 3, Vite, SweetAlert2, Vanilla CSS
+* **Frontend:** Vue 3, Vite, SweetAlert2, CSS3 (Transitions & Animations)
 * **Backend:** PHP (Native)
 * **Database:** MySQL
 * **Server Lokal:** Laragon / XAMPP
 
 ## ✨ Fitur Utama
-* **Autentikasi Pengguna:** Pendaftaran akun baru dan login yang tersimpan secara persisten di database.
-* **Pengacakan Dinamis (Randomizer):** Urutan soal dan opsi jawaban (A, B, C, D) akan selalu diacak setiap kali kuis dimulai.
-* **Navigasi Interaktif:** Sidebar tata letak *split-screen* yang memungkinkan pengguna melompat ke soal manapun.
-* **Validasi Ujian:** Pengguna wajib menjawab seluruh soal sebelum dapat menekan tombol "Selesai Ujian".
-* **Auto-Submit:** Jika timer 3 menit habis, sistem akan otomatis mengirimkan jawaban yang sudah terisi.
-* **Evaluasi Hasil:** Menampilkan skor akhir (skala 0-100) beserta rincian tinjauan (review) jawaban benar dan salah.
+* **Manajemen Sesi (Session Retention):** Pengguna tidak akan ter-logout secara otomatis jika tidak sengaja me-*refresh* halaman web (F5).
+* **Enterprise UI/UX & Anti-Spam:** Efek transisi *fade/slide* antar halaman, serta state *loading* dinamis yang mematikan tombol saat menunggu respons *server* untuk mencegah *spam klik*.
+* **Indikator Progres Visual:** *Progress bar* interaktif yang terisi otomatis seiring jumlah soal yang berhasil dijawab.
+* **Sistem Grading Otomatis:** Laporan hasil kelulusan dinamis berdasarkan *Passing Grade* (KKM = 70), dilengkapi warna indikator.
+* **Pengacakan Dinamis (Randomizer):** Urutan soal dan opsi jawaban akan selalu diacak setiap kali kuis dimulai.
+* **Validasi & Auto-Submit:** Pengguna wajib menjawab seluruh soal untuk mengirim jawaban manual. Jika timer (3 Menit) habis, sistem akan otomatis mengirim jawaban yang ada.
 
-## 📂 Struktur Direktori
-Proyek ini memisahkan *logic* antarmuka dan *logic* basis data ke dalam dua folder utama:
+## 📂 Struktur Direktori (Monorepo)
+Proyek ini dibungkus dalam satu repositori utama dengan pemisahan folder sebagai berikut:
 ```text
-C:\laragon\www\
-├── quiz-frontend/      # (Vue 3 UI, State Management)
+quiz-app/
+├── quiz-frontend/      # (Antarmuka Vue 3 & Logika Kuis)
 │   ├── src/
-│   │   ├── App.vue     # Komponen utama kuis
+│   │   ├── App.vue     # Komponen utama kuis (UI & State)
+│   │   ├── style.css   # Styling dan Animasi
 │   │   └── main.js
 │   ├── package.json
 │   └── vite.config.js
-└── quiz-backend/       # (PHP API, Database Connection)
-    ├── auth.php        # API Login & Register
-    ├── skor.php        # API Simpan Skor
-    └── koneksi.php     # Konfigurasi MySQL
+├── quiz-backend/       # (API PHP & Koneksi Database)
+│   ├── auth.php        # API Login & Register
+│   ├── skor.php        # API Rekam Skor
+│   ├── koneksi.php     # Konfigurasi Database
+│   └── db_quiz_app.sql # Skema Tabel Database
+├── .gitignore
+└── README.md
 
 ```
 
-## 🚀 Panduan Instalasi & Menjalankan Proyek
+## 🚀 Panduan Instalasi & Cara Menjalankan
 
 ### 1. Persiapan Database (MySQL)
 
 1. Buka aplikasi Laragon/XAMPP dan jalankan **Apache** serta **MySQL**.
-2. Buka phpMyAdmin atau HeidiSQL.
+2. Buka aplikasi manajemen database (phpMyAdmin atau HeidiSQL).
 3. Buat database baru bernama `db_quiz_app`.
 4. Eksekusi *query* SQL berikut untuk membuat tabel:
 
@@ -61,26 +65,34 @@ CREATE TABLE leaderboard (
 );
 
 ```
+Atau import file .sql yang berada di dalam folder quiz backend ke dalam database
+1. *Import* file `db_quiz_app.sql` yang berada di dalam folder `quiz-backend/` ke dalam database tersebut.
 
 ### 2. Konfigurasi Backend (PHP)
 
-1. Pastikan folder `quiz-backend` berada di dalam *root directory* server lokal Anda (contoh: `C:\laragon\www\quiz-backend`).
-2. API PHP sudah dilengkapi dengan pengaturan CORS (`Access-Control-Allow-Origin: *`) agar dapat menerima *request* dari port Vue.
+Pastikan seluruh folder proyek (`quiz-app`) ditempatkan di dalam *root directory* server lokal Anda:
+
+* Jika menggunakan Laragon: `C:\laragon\www\quiz-app`
+* Jika menggunakan XAMPP: `C:\xampp\htdocs\quiz-app`
+
+*Catatan: File PHP sudah terkonfigurasi dengan CORS (`Access-Control-Allow-Origin: *`) untuk menerima request dari port Vue.*
 
 ### 3. Menjalankan Frontend (Vue 3)
 
 1. Buka terminal atau *command prompt*.
-2. Masuk ke direktori frontend:
+2. Masuk ke direktori *frontend*:
 ```bash
-cd C:\laragon\www\quiz-frontend
+cd quiz-frontend
 
 ```
 
-3. Instal semua dependensi proyek:
+
+3. Instal seluruh dependensi:
 ```bash
 npm install
 
 ```
+
 
 4. Jalankan server *development*:
 ```bash
@@ -88,11 +100,5 @@ npm run dev
 
 ```
 
-5. Buka tautan yang muncul di terminal (biasanya `http://localhost:5173`) di browser Anda.
 
-```
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+5. Buka tautan lokal yang muncul di terminal (biasanya `http://localhost:5173`) di *browser* Anda.
