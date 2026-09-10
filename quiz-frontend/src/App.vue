@@ -62,7 +62,7 @@ const handleLogin = async () => {
   formData.append("password", passInput.value);
 
   try {
-    const response = await fetch("http://localhost/quiz-app/quiz-backend/auth.php", { method: "POST", body: formData });
+    const response = await fetch("http://localhost/quiz-web-app-vue/quiz-backend/auth.php", { method: "POST", body: formData });
     const data = await response.json();
     if (data.status === "success") {
       sessionStorage.setItem("user_id", data.user_id);
@@ -97,7 +97,7 @@ const handleRegister = async () => {
   formData.append("password", regPass.value);
 
   try {
-    const response = await fetch("http://localhost/quiz-app/quiz-backend/auth.php", { method: "POST", body: formData });
+    const response = await fetch("http://localhost/quiz-web-app-vue/quiz-backend/auth.php", { method: "POST", body: formData });
     const data = await response.json();
     if (data.status === "success") {
       Swal.fire({ icon: 'success', text: 'Akun berhasil dibuat. Silakan login!' });
@@ -216,7 +216,7 @@ const finishQuiz = async (isTimeOut = false) => {
     formData.append("user_id", userId);
     formData.append("skor", score.value);
     try {
-      await fetch("http://localhost/quiz-app/quiz-backend/skor.php", { method: "POST", body: formData });
+      await fetch("http://localhost/quiz-web-app-vue/quiz-backend/skor.php", { method: "POST", body: formData });
     } catch (error) {
       console.error(error);
     }
